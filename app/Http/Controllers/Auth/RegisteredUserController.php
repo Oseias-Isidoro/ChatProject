@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserRolesEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\User;
@@ -46,6 +47,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'account_id' => $account->id,
         ]);
+
+        $user->assignRole(UserRolesEnum::ADMIN->name);
 
         event(new Registered($user));
 
