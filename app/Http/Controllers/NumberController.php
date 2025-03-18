@@ -23,7 +23,7 @@ class NumberController extends Controller
 
     public function index(): Factory|Application|View
     {
-        Gate::authorize('index', Number::class);
+        $this->authorize('index', Number::class);
 
         $numbers = Auth::user()->account
             ->numbers()
@@ -35,8 +35,6 @@ class NumberController extends Controller
 
     public function connect(Number $number): RedirectResponse
     {
-        $this->authorize('connect', $number);
-
         $response = $this->evolutionInstanceService->connect($number->evolutionInstanceName);
 
         $this->evolutionInstanceService->setWebsocket($number->evolutionInstanceName)->body();
@@ -68,8 +66,6 @@ class NumberController extends Controller
 
     public function disconnect(Number $number): RedirectResponse
     {
-        $this->authorize('disconnect', $number);
-
         $response = $this->evolutionInstanceService->disconnect($number->evolutionInstanceName);
 
         if ($response->failed() and $response->status() !== 400) {
