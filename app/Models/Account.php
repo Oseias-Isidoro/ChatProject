@@ -19,4 +19,9 @@ class Account extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function numbers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Number::class);
+    }
 }
