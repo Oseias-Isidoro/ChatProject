@@ -19,12 +19,13 @@ class NumberController extends Controller
     public function __construct(
         public EvolutionInstanceService $evolutionInstanceService,
     )
-    {}
+    {
+        $this->middleware('can:index,App\Models\Number')->only('index');
+        $this->middleware('can:destroy,number')->only('destroy');
+    }
 
     public function index(): Factory|Application|View
     {
-        $this->authorize('index', Number::class);
-
         $numbers = Auth::user()->account
             ->numbers()
             ->orderBy('created_at', 'desc')
@@ -104,8 +105,6 @@ class NumberController extends Controller
 
     public function destroy(Number $number): RedirectResponse
     {
-        $this->authorize('destroy', $number);
-
         if ($this->evolutionInstanceService->delete($number->evolutionInstanceName)->failed()) {
             return redirect()->route('numbers.index')->with('error', __('Not possible to delete number.'));
         }
