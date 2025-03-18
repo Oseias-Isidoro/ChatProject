@@ -6,13 +6,12 @@ namespace App\Http\Controllers\Webhooks;
 use App\Enums\StatusEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
-use App\Models\Number;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\{JsonResponse, Request};
+use Symfony\Component\HttpFoundation\Response;
 
 class EvolutionApiWebhook extends Controller
 {
-    public function update(Request $request): \Illuminate\Http\JsonResponse
+    public function update(Request $request): JsonResponse
     {
         [$account_id, $phone_number] = explode('-', $request->instance);
 
@@ -24,6 +23,6 @@ class EvolutionApiWebhook extends Controller
             $number->update(['status' => StatusEnum::INACTIVE]);
         }
 
-        return response()->json([], );
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }
