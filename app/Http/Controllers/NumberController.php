@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class NumberController extends Controller
 {
@@ -22,6 +23,8 @@ class NumberController extends Controller
 
     public function index(): Factory|Application|View
     {
+        Gate::authorize('index', Number::class);
+
         $numbers = Auth::user()->account
             ->numbers()
             ->orderBy('created_at', 'desc')
@@ -32,6 +35,8 @@ class NumberController extends Controller
 
     public function connect(Number $number): RedirectResponse
     {
+        $this->authorize('connect', $number);
+
         $response = $this->evolutionInstanceService->connect($number->evolutionInstanceName);
 
         $this->evolutionInstanceService->setWebsocket($number->evolutionInstanceName)->body();
@@ -63,6 +68,8 @@ class NumberController extends Controller
 
     public function disconnect(Number $number): RedirectResponse
     {
+        $this->authorize('disconnect', $number);
+
         $response = $this->evolutionInstanceService->disconnect($number->evolutionInstanceName);
 
         if ($response->failed() and $response->status() !== 400) {
@@ -101,6 +108,8 @@ class NumberController extends Controller
 
     public function destroy(Number $number): RedirectResponse
     {
+        $this->authorize('destroy', $number);
+
         if ($this->evolutionInstanceService->delete($number->evolutionInstanceName)->failed()) {
             return redirect()->route('numbers.index')->with('error', __('Not possible to delete number.'));
         }
