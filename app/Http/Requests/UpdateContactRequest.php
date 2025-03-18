@@ -2,16 +2,17 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\UserRolesEnum;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateContactRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return Auth::user()->hasRole([UserRolesEnum::ADMIN->name, UserRolesEnum::OPERATOR->name]);
+        return Gate::authorize('update', $this->contact);
     }
 
     public function rules(): array
