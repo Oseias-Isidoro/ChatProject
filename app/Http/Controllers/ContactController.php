@@ -14,8 +14,6 @@ class ContactController extends Controller
     public function __construct()
     {
         $this->middleware('can:index,App\Models\Contact')->only('index');
-        $this->middleware('can:store,App\Models\Contact')->only('store');
-        $this->middleware('can:update,contact')->only('update');
         $this->middleware('can:destroy,contact')->only('destroy');
     }
 
