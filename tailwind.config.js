@@ -18,4 +18,9 @@ export default {
     },
 
     plugins: [forms],
+
+    // Adicione o safelist aqui
+    safelist: [
+        'bg-*',
+    ],
 };
