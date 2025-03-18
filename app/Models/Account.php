@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
 {
-    /** @use HasFactory<\Database\Factories\AccountFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
@@ -23,5 +22,10 @@ class Account extends Model
     public function numbers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Number::class);
+    }
+
+    public function contacts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Contact::class);
     }
 }
