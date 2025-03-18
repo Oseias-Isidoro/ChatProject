@@ -2,16 +2,18 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\UserRolesEnum;
+use App\Models\Contact;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class StoreContactRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return Auth::user()->hasRole([UserRolesEnum::ADMIN->name, UserRolesEnum::OPERATOR->name]);
+        return Gate::authorize('store', Contact::class);
     }
 
     public function rules(): array
