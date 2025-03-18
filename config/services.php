@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'evolution' => [
+        'apikey' => env('EVOLUTION_APIKEY'),
+        'base_url' => env('EVOLUTION_BASE_URL'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
