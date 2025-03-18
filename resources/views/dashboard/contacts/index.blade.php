@@ -64,39 +64,41 @@
         </div>
     </div>
 
-    <x-mini-modal title="{{ __('Add Contact') }}">
-        <form method="POST" action="{{ route('contacts.store') }}">
-            @csrf
-            <div class="mb-4">
-                <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Name') }} *</label>
-                <input type="text" name="name" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ old('name') }}" required>
-                @error('name')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+    @if (request('modal') === 'open')
+        <x-mini-modal title="{{ __('Add Contact') }}">
+            <form method="POST" action="{{ route('contacts.store') }}">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Name') }} *</label>
+                    <input type="text" name="name" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ old('name') }}" required>
+                    @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Phone Number') }} *</label>
-                <input type="text" name="phone_number" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ old('phone_number') }}" required>
-                @error('phone_number')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Phone Number') }} *</label>
+                    <input type="text" name="phone_number" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ old('phone_number') }}" required>
+                    @error('phone_number')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Email') }}</label>
-                <input type="email" name="email" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ old('email') }}" >
-                @error('email')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Email') }}</label>
+                    <input type="email" name="email" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ old('email') }}" >
+                    @error('email')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="flex justify-end">
-                <a href="{{ route('contacts.index') }}" class="mr-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500">{{ __('Cancel') }}</a>
-                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">{{ __('Save') }}</button>
-            </div>
-        </form>
-    </x-mini-modal>
+                <div class="flex justify-end">
+                    <a href="{{ route('contacts.index') }}" class="mr-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500">{{ __('Cancel') }}</a>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">{{ __('Save') }}</button>
+                </div>
+            </form>
+        </x-mini-modal>
+    @endif
 
     <!-- Modal de Edição (Aparece apenas se "edit" estiver na URL) -->
     @if (request('edit'))
@@ -105,49 +107,41 @@
         @endphp
 
         @if ($numberToEdit)
-            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="bg-gray-900 p-6 rounded-2xl shadow-lg w-96">
-                    <!-- Título e Botão Fechar -->
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-white text-lg font-semibold">{{ __('Edit Contact') }}</h2>
-                        <a href="{{ route('contacts.index') }}" class="text-white hover:text-gray-400 text-xl">&times;</a>
+            <x-mini-modal title="{{'Edit Contact'}}">
+                <!-- Formulário de Edição -->
+                <form method="POST" action="{{ route('contacts.update', $numberToEdit->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-4">
+                        <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Name') }}</label>
+                        <input type="text" name="name" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ $numberToEdit->name }}" required>
+                        @error('name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <!-- Formulário de Edição -->
-                    <form method="POST" action="{{ route('contacts.update', $numberToEdit->id) }}">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-4">
-                            <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Name') }}</label>
-                            <input type="text" name="name" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ $numberToEdit->name }}" required>
-                            @error('name')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Phone Number') }}</label>
+                        <input type="text" name="phone_number" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ $numberToEdit->phone_number }}" required>
+                        @error('phone_number')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <div class="mb-4">
-                            <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Phone Number') }}</label>
-                            <input type="text" name="phone_number" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ $numberToEdit->phone_number }}" required>
-                            @error('phone_number')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Email') }}</label>
+                        <input type="email" name="email" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ $numberToEdit->email }}" >
+                        @error('email')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <div class="mb-4">
-                            <label class="block text-gray-400 text-sm font-semibold mb-2">{{ __('Email') }}</label>
-                            <input type="email" name="email" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" value="{{ $numberToEdit->email }}" >
-                            @error('email')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex justify-end">
-                            <a href="{{ route('contacts.index') }}" class="mr-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500">{{ __('Cancel') }}</a>
-                            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">{{ __('Update') }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    <div class="flex justify-end">
+                        <a href="{{ route('contacts.index') }}" class="mr-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500">{{ __('Cancel') }}</a>
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">{{ __('Update') }}</button>
+                    </div>
+                </form>
+            </x-mini-modal>
         @endif
     @endif
 
