@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StatusEnum;
-use App\Events\UpdateNumber;
+use App\Events\UpdateNumberStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,10 +25,12 @@ class Number extends Model
         'status' => StatusEnum::class
     ];
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::updated(function ($number) {
-            event(new UpdateNumber($number));
+            if ($number->wasChanged('status')) {
+                event(new UpdateNumberStatus($number));
+            }
         });
     }
 
