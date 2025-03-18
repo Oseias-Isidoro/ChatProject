@@ -11,6 +11,9 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+        <link href="https://cdn.jsdelivr.net/npm/noty@3/lib/noty.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/noty@3/lib/noty.min.js"></script>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -32,5 +35,25 @@
                 {{ $slot }}
             </main>
         </div>
+
+        @if(session('success'))
+            <script>
+                new Noty({
+                    type: 'success',
+                    text: "{{ session('success') }}",
+                    timeout: 3000,
+                }).show();
+            </script>
+        @endif
+
+        @if(session('error'))
+            <script>
+                new Noty({
+                    type: 'error',
+                    text: "{{ session('error') }}",
+                    timeout: 3000,
+                }).show();
+            </script>
+        @endif
     </body>
 </html>
