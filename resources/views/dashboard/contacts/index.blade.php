@@ -11,14 +11,8 @@
                 <div class="p-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         <!-- Botão para abrir o modal de criação -->
-                        <div class="flex items-center justify-center bg-gray-800 p-6 rounded-2xl shadow-md hover:bg-gray-700 transition duration-300 cursor-pointer">
-                            <a href="{{ route('contacts.index', ['modal' => 'open']) }}" class="flex flex-col items-center text-white">
-                                <svg class="w-12 h-12 mb-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
-                                <span class="text-lg font-semibold">{{ __('Add Contact') }}</span>
-                            </a>
-                        </div>
+
+                        <x-add-button route="{{route('contacts.index', ['modal' => 'open'])}}" title="{{ __('Add Contact') }}"/>
 
                         @foreach($contacts as $contact)
                             <div class="bg-gray-900 p-6 rounded-2xl shadow-md hover:bg-gray-800 transition duration-300">
