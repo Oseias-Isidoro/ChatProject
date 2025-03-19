@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -47,8 +48,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function account(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function numbers(): BelongsToMany
+    {
+        return $this->belongsToMany(Number::class, 'number_user');
     }
 }
